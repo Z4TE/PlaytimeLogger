@@ -46,10 +46,9 @@ public final class Main extends JavaPlugin implements Listener {
         joinTimeMap.put(playerId, System.currentTimeMillis());
 
         long totalPlaytime = this.getConfig().getLong(playerId.toString());
-        String prefix = this.getConfig().getString("prefix");
-        String postfix = this.getConfig().getString("postfix");
 
-        String message = ChatColor.YELLOW + prefix + "Your total playtime on this server is " + formatPlayTime(totalPlaytime) + postfix;
+        String postfix = "(since 12/28)";
+        String message = ChatColor.YELLOW + "Your total playtime on this server is " + formatPlayTime(totalPlaytime) + postfix;
 
         player.sendMessage(message);
     }
