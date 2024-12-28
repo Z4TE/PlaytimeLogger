@@ -47,7 +47,7 @@ public final class Main extends JavaPlugin implements Listener {
 
         long totalPlaytime = this.getConfig().getLong(playerId.toString());
 
-        String postfix = "(since 12/28)";
+        String postfix = " (since 24/12/28)";
         String message = ChatColor.YELLOW + "Your total playtime on this server is " + formatPlayTime(totalPlaytime) + postfix;
 
         player.sendMessage(message);
