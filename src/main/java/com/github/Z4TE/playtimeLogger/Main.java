@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public final class Main extends JavaPlugin implements Listener {
@@ -41,11 +42,16 @@ public final class Main extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
+
         joinTimeMap.put(playerId, System.currentTimeMillis());
 
         long totalPlaytime = this.getConfig().getLong(playerId.toString());
+        String prefix = this.getConfig().getString("prefix");
+        String postfix = this.getConfig().getString("postfix");
 
-        player.sendMessage(ChatColor.YELLOW + "Your total playtime on this server is " + formatPlayTime(totalPlaytime));
+        String message = ChatColor.YELLOW + prefix + "Your total playtime on this server is " + formatPlayTime(totalPlaytime) + postfix;
+
+        player.sendMessage(message);
     }
 
     @EventHandler
@@ -58,11 +64,15 @@ public final class Main extends JavaPlugin implements Listener {
             long playTime = System.currentTimeMillis() - joinTime;
             playTimeMap.put(playerId, playTimeMap.getOrDefault(playerId, 0L) + playTime);
             joinTimeMap.remove(playerId);
+
+            this.getConfig().set(playerId.toString(), playTimeMap.get(playerId) + playTime);
+            saveConfig();
         }
     }
 
     private String formatPlayTime(long milliseconds) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date resultDate = new Date(milliseconds);
         return sdf.format(resultDate);
     }
